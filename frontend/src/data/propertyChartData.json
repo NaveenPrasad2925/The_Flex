@@ -1,0 +1,76 @@
+{
+  "tab1": {
+    "chartTitle": "Portfolio Composition: Property Type & Revenue Share",
+    "innerRingFocus": "Property Type",
+    "outerRingFocus": "Revenue Share",
+    "data": [
+      {
+        "category": "Entire Home/Villa",
+        "count_percentage": 25,
+        "revenue_percentage": 55,
+        "color": "#1f77b4"
+      },
+      {
+        "category": "Studio/Apartment",
+        "count_percentage": 35,
+        "revenue_percentage": 25,
+        "color": "#ff7f0e"
+      },
+      {
+        "category": "Private Room",
+        "count_percentage": 20,
+        "revenue_percentage": 10,
+        "color": "#2ca02c"
+      },
+      {
+        "category": "Shared Room/Hostel",
+        "count_percentage": 10,
+        "revenue_percentage": 5,
+        "color": "#9467bd"
+      },
+      {
+        "category": "Boutique/Unique Stay",
+        "count_percentage": 10,
+        "revenue_percentage": 5,
+        "color": "#8c564b"
+      }
+    ]
+  },
+  "tab2": {
+    "chartTitle": "Portfolio Health: Properties by Performance Status & Booking Share",
+    "innerRingFocus": "Property Status",
+    "outerRingFocus": "Booking Share",
+    "data": [
+      {
+        "category": "High Performing (>4.5)",
+        "count_percentage": 35,
+        "booking_percentage": 50,
+        "color": "#2ca02c"
+      },
+      {
+        "category": "Solid (4.3-4.5)",
+        "count_percentage": 25,
+        "booking_percentage": 25,
+        "color": "#17becf"
+      },
+      {
+        "category": "Average (4.0-4.3)",
+        "count_percentage": 25,
+        "booking_percentage": 20,
+        "color": "#ff7f0e"
+      },
+      {
+        "category": "Needs Attention (<4.0)",
+        "count_percentage": 10,
+        "booking_percentage": 4,
+        "color": "#d62728"
+      },
+      {
+        "category": "New/Unrated",
+        "count_percentage": 5,
+        "booking_percentage": 1,
+        "color": "#7f7f7f"
+      }
+    ]
+  }
+}

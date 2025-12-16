@@ -1,0 +1,17 @@
+{
+  "propertyTypes": [
+    { "type": "Apartment", "count": 45, "color": "#8884d8" },
+    { "type": "House", "count": 32, "color": "#82ca9d" },
+    { "type": "Condo", "count": 28, "color": "#ffc658" },
+    { "type": "Studio", "count": 15, "color": "#ff7300" }
+  ],
+  "operationalStatus": [
+    { "status": "Active", "count": 120, "color": "#10b981" },
+    { "status": "Maintenance", "count": 15, "color": "#f59e0b" },
+    { "status": "Vacant", "count": 10, "color": "#ef4444" },
+    { "status": "Pending", "count": 5, "color": "#6366f1" }
+  ]
+}
+
+
+
