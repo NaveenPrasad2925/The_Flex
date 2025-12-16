@@ -70,14 +70,6 @@ VITE_HOSTAWAY_CLIENT_SECRET=your_client_secret_here
 VITE_HOSTAWAY_TOKEN_URL=https://api.hostaway.com/v1/accessTokens
 VITE_HOSTAWAY_BASE_URL=https://api.hostaway.com/v1
 ```
-
-```env
-VITE_HOSTAWAY_CLIENT_ID=61148
-VITE_HOSTAWAY_CLIENT_SECRET=abc123xyz789secretkey
-VITE_HOSTAWAY_TOKEN_URL=https://api.hostaway.com/v1/accessTokens
-VITE_HOSTAWAY_BASE_URL=https://api.hostaway.com/v1
-```
-
 ## 🏃 Running the Application
 
 ### Development Mode
