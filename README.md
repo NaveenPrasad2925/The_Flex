@@ -71,24 +71,6 @@ VITE_HOSTAWAY_TOKEN_URL=https://api.hostaway.com/v1/accessTokens
 VITE_HOSTAWAY_BASE_URL=https://api.hostaway.com/v1
 ```
 
-### Step 3: Get Your Hostaway Credentials
-
-1. Log in to your [Hostaway Dashboard](https://app.hostaway.com/)
-2. Navigate to **Settings** → **API** → **OAuth Applications**
-3. Create a new OAuth application or use an existing one
-4. Copy your **Client ID** and **Client Secret**
-5. Replace the placeholder values in your `.env` file
-
-### Important Notes:
-
-- ⚠️ **Never commit your `.env` file** - It's already in `.gitignore`
-- ✅ All environment variables **must** start with `VITE_` to be accessible in the browser
-- ✅ `VITE_HOSTAWAY_CLIENT_ID` should be a **number** (your Hostaway account ID)
-- ✅ `VITE_HOSTAWAY_CLIENT_SECRET` should be a **string** (from your Hostaway dashboard)
-- ✅ After changing `.env` file, **restart the development server**
-
-### Example `.env` File:
-
 ```env
 VITE_HOSTAWAY_CLIENT_ID=61148
 VITE_HOSTAWAY_CLIENT_SECRET=abc123xyz789secretkey
@@ -229,17 +211,6 @@ lsof -ti:5173 | xargs kill -9
 - `npm run preview` - Preview production build
 - `npm run lint` - Run ESLint
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License.
 
 ## 🔗 Links
 
@@ -247,16 +218,5 @@ This project is licensed under the MIT License.
 - [React Documentation](https://react.dev/)
 - [Vite Documentation](https://vitejs.dev/)
 
-## 💡 Support
 
-For issues and questions:
-1. Check the troubleshooting section above
-2. Review the documentation files in `frontend/`:
-   - `HOSTAWAY_SETUP.md`
-   - `TROUBLESHOOTING.md`
-   - `TROUBLESHOOTING_AUTH.md`
-3. Open an issue on GitHub
 
----
-
-**Happy Coding! 🎉**
