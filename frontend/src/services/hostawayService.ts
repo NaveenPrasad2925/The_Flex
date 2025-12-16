@@ -17,14 +17,13 @@ const HOSTAWAY_API_BASE_URL = 'https://api.hostaway.com/v1'
 const HOSTAWAY_TOKEN_URL = `${HOSTAWAY_API_BASE_URL}/accessTokens`
 const HOSTAWAY_BASE_URL = HOSTAWAY_API_BASE_URL
 
-// Log configuration on module load (for debugging) - only in development
-if (import.meta.env.DEV) {
-  console.log('[Hostaway API] Configuration:')
-  console.log('  Client ID:', HOSTAWAY_CLIENT_ID ? `${HOSTAWAY_CLIENT_ID.substring(0, 5)}...` : 'NOT SET')
-  console.log('  Client Secret:', HOSTAWAY_CLIENT_SECRET ? 'SET' : 'NOT SET')
-  console.log('  Token URL:', HOSTAWAY_TOKEN_URL)
-  console.log('  Base URL:', HOSTAWAY_BASE_URL)
-}
+// Log configuration on module load (for debugging) - both dev and production
+console.log('[Hostaway API] Configuration loaded:')
+console.log('  Client ID:', HOSTAWAY_CLIENT_ID ? `${HOSTAWAY_CLIENT_ID.substring(0, 5)}...` : 'NOT SET')
+console.log('  Client Secret:', HOSTAWAY_CLIENT_SECRET ? 'SET' : 'NOT SET')
+console.log('  Token URL:', HOSTAWAY_TOKEN_URL)
+console.log('  Base URL:', HOSTAWAY_BASE_URL)
+console.log('  Environment:', import.meta.env.MODE)
 
 // Token storage
 interface TokenData {
@@ -78,22 +77,24 @@ async function getAccessToken(): Promise<string> {
     }
     
     // Hostaway OAuth token endpoint (Client Credentials Grant)
-    const body = new URLSearchParams({
-      grant_type: 'client_credentials',
-      client_id: HOSTAWAY_CLIENT_ID.trim(),
-      client_secret: HOSTAWAY_CLIENT_SECRET.trim(),
-      scope: 'general',
-    })
-
+    // Create URLSearchParams and convert to string to ensure proper encoding
+    const params = new URLSearchParams()
+    params.append('grant_type', 'client_credentials')
+    params.append('client_id', HOSTAWAY_CLIENT_ID.trim())
+    params.append('client_secret', HOSTAWAY_CLIENT_SECRET.trim())
+    params.append('scope', 'general')
+    
+    const bodyString = params.toString()
+    
     // Log the request body (without exposing the secret)
-    const bodyString = body.toString()
     const bodyForLog = bodyString.replace(/client_secret=[^&]*/, 'client_secret=***')
     console.log('[Hostaway API] Request body:', bodyForLog)
     console.log('[Hostaway API] Content-Type: application/x-www-form-urlencoded')
+    console.log('[Hostaway API] Body length:', bodyString.length)
 
     const response = await axios.post(
       HOSTAWAY_TOKEN_URL,
-      body,
+      bodyString, // Send as string, not URLSearchParams object
       {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
