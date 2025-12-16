@@ -13,11 +13,24 @@ ARG VITE_HOSTAWAY_CLIENT_SECRET
 ARG VITE_HOSTAWAY_TOKEN_URL=https://api.hostaway.com/v1/accessTokens
 ARG VITE_HOSTAWAY_BASE_URL=https://api.hostaway.com/v1
 
+# Validate that required build arguments are provided
+RUN if [ -z "$VITE_HOSTAWAY_CLIENT_ID" ] || [ -z "$VITE_HOSTAWAY_CLIENT_SECRET" ]; then \
+    echo "ERROR: VITE_HOSTAWAY_CLIENT_ID and VITE_HOSTAWAY_CLIENT_SECRET must be provided as build arguments" && \
+    echo "Usage: docker build --build-arg VITE_HOSTAWAY_CLIENT_ID=xxx --build-arg VITE_HOSTAWAY_CLIENT_SECRET=yyy -t image:tag ." && \
+    exit 1; \
+    fi
+
 # Set environment variables for build (Vite requires these at build time)
+# Use ARG values directly in ENV to ensure they're available during build
 ENV VITE_HOSTAWAY_CLIENT_ID=$VITE_HOSTAWAY_CLIENT_ID
 ENV VITE_HOSTAWAY_CLIENT_SECRET=$VITE_HOSTAWAY_CLIENT_SECRET
 ENV VITE_HOSTAWAY_TOKEN_URL=$VITE_HOSTAWAY_TOKEN_URL
 ENV VITE_HOSTAWAY_BASE_URL=$VITE_HOSTAWAY_BASE_URL
+
+# Verify environment variables are set (for debugging)
+RUN echo "Building with VITE_HOSTAWAY_CLIENT_ID: ${VITE_HOSTAWAY_CLIENT_ID:0:5}..." && \
+    echo "Building with VITE_HOSTAWAY_CLIENT_SECRET: ${VITE_HOSTAWAY_CLIENT_SECRET:+SET}" && \
+    echo "Building with VITE_HOSTAWAY_TOKEN_URL: $VITE_HOSTAWAY_TOKEN_URL"
 
 # Copy package files
 COPY package*.json ./

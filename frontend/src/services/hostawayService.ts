@@ -66,14 +66,30 @@ async function getAccessToken(): Promise<string> {
   try {
     console.log('[Hostaway API] Requesting new access token directly from Hostaway...')
     console.log('[Hostaway API] Token URL:', HOSTAWAY_TOKEN_URL)
+    console.log('[Hostaway API] Client ID present:', !!HOSTAWAY_CLIENT_ID, HOSTAWAY_CLIENT_ID ? `${HOSTAWAY_CLIENT_ID.substring(0, 5)}...` : 'MISSING')
+    console.log('[Hostaway API] Client Secret present:', !!HOSTAWAY_CLIENT_SECRET, HOSTAWAY_CLIENT_SECRET ? 'SET' : 'MISSING')
+    
+    // Validate credentials are not empty
+    if (!HOSTAWAY_CLIENT_ID || HOSTAWAY_CLIENT_ID.trim() === '') {
+      throw new Error('VITE_HOSTAWAY_CLIENT_ID is empty or not set. Please provide it during Docker build with --build-arg.')
+    }
+    if (!HOSTAWAY_CLIENT_SECRET || HOSTAWAY_CLIENT_SECRET.trim() === '') {
+      throw new Error('VITE_HOSTAWAY_CLIENT_SECRET is empty or not set. Please provide it during Docker build with --build-arg.')
+    }
     
     // Hostaway OAuth token endpoint (Client Credentials Grant)
     const body = new URLSearchParams({
       grant_type: 'client_credentials',
-      client_id: HOSTAWAY_CLIENT_ID,
-      client_secret: HOSTAWAY_CLIENT_SECRET,
+      client_id: HOSTAWAY_CLIENT_ID.trim(),
+      client_secret: HOSTAWAY_CLIENT_SECRET.trim(),
       scope: 'general',
     })
+
+    // Log the request body (without exposing the secret)
+    const bodyString = body.toString()
+    const bodyForLog = bodyString.replace(/client_secret=[^&]*/, 'client_secret=***')
+    console.log('[Hostaway API] Request body:', bodyForLog)
+    console.log('[Hostaway API] Content-Type: application/x-www-form-urlencoded')
 
     const response = await axios.post(
       HOSTAWAY_TOKEN_URL,
@@ -131,13 +147,15 @@ async function getAccessToken(): Promise<string> {
       const statusText = error.response?.statusText
       const responseData = error.response?.data
       const requestUrl = error.config?.url
+      const requestData = error.config?.data
       
       console.error('[Hostaway API] Authentication Error Details:')
       console.error('  Status:', status)
       console.error('  Status Text:', statusText)
       console.error('  URL:', requestUrl)
-      console.error('  Response Data:', responseData)
+      console.error('  Request Data:', requestData ? requestData.toString().replace(/client_secret=[^&]*/, 'client_secret=***') : 'N/A')
       console.error('  Request Headers:', error.config?.headers)
+      console.error('  Response Data:', responseData)
       
       let errorMessage = 'Failed to authenticate with Hostaway API'
       
