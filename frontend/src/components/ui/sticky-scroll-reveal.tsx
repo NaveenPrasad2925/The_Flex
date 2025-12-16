@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { motion, useScroll, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { HeroHighlight, Highlight } from "./hero-highlight";
 
@@ -44,16 +44,17 @@ export const StickyScroll = ({
     return () => unsubscribe();
   }, [scrollYProgress, cardLength, content]);
 
-  const backgroundColors = [
-    "var(--slate-900)",
-    "var(--black)",
-    "var(--neutral-900)",
-  ];
-  const linearGradients = [
-    "linear-gradient(to bottom right, var(--cyan-500), var(--emerald-500))",
-    "linear-gradient(to bottom right, var(--pink-500), var(--violet-500))",
-    "linear-gradient(to bottom right, var(--orange-500), var(--yellow-500))",
-  ];
+  // Unused but kept for potential future use
+  // const backgroundColors = [
+  //   "var(--slate-900)",
+  //   "var(--black)",
+  //   "var(--neutral-900)",
+  // ];
+  // const linearGradients = [
+  //   "linear-gradient(to bottom right, var(--cyan-500), var(--emerald-500))",
+  //   "linear-gradient(to bottom right, var(--pink-500), var(--violet-500))",
+  //   "linear-gradient(to bottom right, var(--orange-500), var(--yellow-500))",
+  // ];
 
   // Function to parse description and highlight important words
   const parseDescriptionWithHighlights = (description: string) => {

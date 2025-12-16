@@ -1,8 +1,8 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { useMotionValue, useSpring, useTransform } from "framer-motion";
+import { useMotionValue, useSpring } from "framer-motion";
 import { motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 export const Highlight = ({
   children,
@@ -17,11 +17,8 @@ export const Highlight = ({
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
-  const mouseXSpring = useSpring(x);
-  const mouseYSpring = useSpring(y);
-
-  const top = useTransform(mouseYSpring, [0.5, -0.5], ["40%", "60%"]);
-  const left = useTransform(mouseXSpring, [0.5, -0.5], ["40%", "60%"]);
+  useSpring(x);
+  useSpring(y);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLSpanElement>) => {
     if (!ref.current) return;

@@ -9,7 +9,7 @@ type FilterType = 'all' | 'rating' | 'category' | 'channel' | 'time'
 type SortType = 'default' | 'rating-high' | 'rating-low' | 'price-high' | 'price-low' | 'newest' | 'oldest'
 
 const Listings = () => {
-  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchParams] = useSearchParams()
   const [allListings, setAllListings] = useState<HostawayListing[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)

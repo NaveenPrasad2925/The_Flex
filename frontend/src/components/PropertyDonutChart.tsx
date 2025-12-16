@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { PieChart, pieArcLabelClasses } from '@mui/x-charts/PieChart';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { useDrawingArea } from '@mui/x-charts/hooks';
@@ -91,7 +90,7 @@ export default function PropertyDonutChart(): React.ReactElement {
   const navigate = useNavigate();
   const [view, setView] = React.useState<ViewType>('type');
   const handleViewChange = (
-    event: React.MouseEvent<HTMLElement>,
+    _event: React.MouseEvent<HTMLElement>,
     newView: ViewType | null,
   ) => {
     if (newView !== null) {
@@ -148,11 +147,11 @@ export default function PropertyDonutChart(): React.ReactElement {
   };
 
   const handleItemClick = (
-    event: React.MouseEvent,
-    itemIdentifier: { type: string; seriesId: string; dataIndex: number },
-    item: ChartDatum
+    _event: React.MouseEvent,
+    _itemIdentifier: { type: string; seriesId: string | number; dataIndex: number },
+    item: any
   ) => {
-    const clickedId = item.id as string;
+    const clickedId = (item?.id || item?.label) as string;
     const categoryId = clickedId.split('-')[0]; // Remove suffix like '-revenue' or '-booking'
     
     // Find the category name from the data
@@ -201,7 +200,7 @@ export default function PropertyDonutChart(): React.ReactElement {
                 outerRadius: middleRadius,
                 data: innerData,
                 arcLabel: (item) => {
-                  const datum = item as ChartDatum;
+                  const datum = item as unknown as ChartDatum;
                   return `${datum.percentage.toFixed(0)}%`;
                 },
                 arcLabelMinAngle: 15,
@@ -223,7 +222,7 @@ export default function PropertyDonutChart(): React.ReactElement {
                 outerRadius: middleRadius + 30,
                 data: outerData,
                 arcLabel: (item) => {
-                  const datum = item as ChartDatum;
+                  const datum = item as unknown as ChartDatum;
                   return `${datum.percentage.toFixed(0)}%`;
                 },
                 arcLabelMinAngle: 15,
