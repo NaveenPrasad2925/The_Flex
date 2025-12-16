@@ -6,6 +6,19 @@ FROM node:18-alpine AS builder
 # Set working directory
 WORKDIR /app
 
+# Accept build arguments for environment variables
+# These must be provided during docker build using --build-arg
+ARG VITE_HOSTAWAY_CLIENT_ID
+ARG VITE_HOSTAWAY_CLIENT_SECRET
+ARG VITE_HOSTAWAY_TOKEN_URL=https://api.hostaway.com/v1/accessTokens
+ARG VITE_HOSTAWAY_BASE_URL=https://api.hostaway.com/v1
+
+# Set environment variables for build (Vite requires these at build time)
+ENV VITE_HOSTAWAY_CLIENT_ID=$VITE_HOSTAWAY_CLIENT_ID
+ENV VITE_HOSTAWAY_CLIENT_SECRET=$VITE_HOSTAWAY_CLIENT_SECRET
+ENV VITE_HOSTAWAY_TOKEN_URL=$VITE_HOSTAWAY_TOKEN_URL
+ENV VITE_HOSTAWAY_BASE_URL=$VITE_HOSTAWAY_BASE_URL
+
 # Copy package files
 COPY package*.json ./
 
@@ -15,7 +28,7 @@ RUN npm ci --only=production=false
 # Copy source code
 COPY . .
 
-# Build the application
+# Build the application (environment variables are baked into the build)
 RUN npm run build
 
 # Stage 2: Serve with nginx
@@ -36,3 +49,4 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
 
 # Start nginx
 CMD ["nginx", "-g", "daemon off;"]
+

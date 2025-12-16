@@ -111,20 +111,47 @@ npm run preview
 ### Prerequisites for Docker
 
 - **Docker** (v20.10 or higher) - [Download](https://www.docker.com/get-started)
-- **Docker Compose** (v2.0 or higher) - Usually included with Docker Desktop
 
 ### Building the Docker Image
 
-#### Option 1: Using Dockerfile (Production)
+**Important:** Vite requires environment variables at **build time**, not runtime. You must pass your Hostaway credentials as build arguments during the `docker build` command.
 
-Build the production image:
+#### Option 1: Using Build Scripts (Recommended)
+
+**Windows PowerShell:**
+```powershell
+cd frontend
+.\build-and-run.ps1 -ClientId "your_client_id" -ClientSecret "your_secret" -Port 3000
+```
+
+**Mac/Linux:**
+```bash
+cd frontend
+chmod +x build-and-run.sh
+./build-and-run.sh your_client_id your_secret 3000
+```
+
+#### Option 2: Manual Docker Build and Run
+
+**Step 1: Build the Docker image with credentials**
 
 ```bash
 cd frontend
-docker build -t flex-living-frontend:latest .
+
+# Windows PowerShell
+docker build `
+  --build-arg VITE_HOSTAWAY_CLIENT_ID=your_client_id `
+  --build-arg VITE_HOSTAWAY_CLIENT_SECRET=your_secret `
+  -t flex-living-frontend:latest .
+
+# Mac/Linux
+docker build \
+  --build-arg VITE_HOSTAWAY_CLIENT_ID=your_client_id \
+  --build-arg VITE_HOSTAWAY_CLIENT_SECRET=your_secret \
+  -t flex-living-frontend:latest .
 ```
 
-Run the container:
+**Step 2: Run the container**
 
 ```bash
 docker run -d -p 3000:80 --name flex-living-app flex-living-frontend:latest
@@ -132,33 +159,61 @@ docker run -d -p 3000:80 --name flex-living-app flex-living-frontend:latest
 
 The application will be available at: http://localhost:3000
 
-#### Option 2: Using Docker Compose (Recommended)
-
-Build and run using Docker Compose:
-
+**Example with actual values:**
 ```bash
-# From the root directory
-docker-compose up -d
+docker build \
+  --build-arg VITE_HOSTAWAY_CLIENT_ID=61148 \
+  --build-arg VITE_HOSTAWAY_CLIENT_SECRET=abc123xyz789secretkey \
+  -t flex-living-frontend:latest .
+
+docker run -d -p 3000:80 --name flex-living-app flex-living-frontend:latest
 ```
 
-The application will be available at: http://localhost:3000
+### Docker Commands Reference
 
-To rebuild after changes:
-
+**Build the image:**
 ```bash
-docker-compose up -d --build
+cd frontend
+docker build \
+  --build-arg VITE_HOSTAWAY_CLIENT_ID=your_client_id \
+  --build-arg VITE_HOSTAWAY_CLIENT_SECRET=your_secret \
+  -t flex-living-frontend:latest .
 ```
 
-To stop the container:
-
+**Run the container:**
 ```bash
-docker-compose down
+docker run -d -p 3000:80 --name flex-living-app flex-living-frontend:latest
 ```
 
-To view logs:
-
+**Stop the container:**
 ```bash
-docker-compose logs -f
+docker stop flex-living-app
+```
+
+**Remove the container:**
+```bash
+docker rm flex-living-app
+```
+
+**View logs:**
+```bash
+docker logs -f flex-living-app
+```
+
+**Rebuild after code changes:**
+```bash
+# Stop and remove existing container
+docker stop flex-living-app
+docker rm flex-living-app
+
+# Rebuild with new credentials
+docker build \
+  --build-arg VITE_HOSTAWAY_CLIENT_ID=your_client_id \
+  --build-arg VITE_HOSTAWAY_CLIENT_SECRET=your_secret \
+  -t flex-living-frontend:latest .
+
+# Run again
+docker run -d -p 3000:80 --name flex-living-app flex-living-frontend:latest
 ```
 
 ### Development Mode with Docker
@@ -176,46 +231,13 @@ docker run -d -p 5173:5173 -v $(pwd):/app -v /app/node_modules --name flex-livin
 docker run -d -p 5173:5173 -v ${PWD}:/app -v /app/node_modules --name flex-living-dev flex-living-frontend:dev
 ```
 
-### Environment Variables in Docker
+### Important Notes about Environment Variables
 
-Since Vite requires environment variables at build time, you have two options:
-
-#### Option 1: Build-time Environment Variables (Recommended)
-
-Create a `.env` file in the `frontend` directory before building:
-
-```bash
-cd frontend
-# Create .env file with your variables
-echo "VITE_HOSTAWAY_CLIENT_ID=your_client_id" > .env
-echo "VITE_HOSTAWAY_CLIENT_SECRET=your_secret" >> .env
-```
-
-Then build the Docker image:
-
-```bash
-docker build -t flex-living-frontend:latest .
-```
-
-#### Option 2: Using Build Arguments
-
-Modify the Dockerfile to accept build arguments:
-
-```dockerfile
-ARG VITE_HOSTAWAY_CLIENT_ID
-ARG VITE_HOSTAWAY_CLIENT_SECRET
-ENV VITE_HOSTAWAY_CLIENT_ID=$VITE_HOSTAWAY_CLIENT_ID
-ENV VITE_HOSTAWAY_CLIENT_SECRET=$VITE_HOSTAWAY_CLIENT_SECRET
-```
-
-Build with arguments:
-
-```bash
-docker build \
-  --build-arg VITE_HOSTAWAY_CLIENT_ID=your_client_id \
-  --build-arg VITE_HOSTAWAY_CLIENT_SECRET=your_secret \
-  -t flex-living-frontend:latest .
-```
+- ⚠️ **Vite requires environment variables at BUILD time**, not runtime
+- ✅ You **must** pass credentials using `--build-arg` during `docker build`
+- ✅ Environment variables are **baked into the JavaScript bundle** during build
+- ✅ If you change credentials, you need to **rebuild the image**
+- ✅ Never commit your actual credentials to version control
 
 ### Docker Commands Reference
 
@@ -374,6 +396,7 @@ lsof -ti:5173 | xargs kill -9
 - [Hostaway API Documentation](https://api.hostaway.com/)
 - [React Documentation](https://react.dev/)
 - [Vite Documentation](https://vitejs.dev/)
+
 
 
 
